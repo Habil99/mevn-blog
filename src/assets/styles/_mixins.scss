@@ -1,0 +1,361 @@
+@mixin starter {
+    @include prefix(box-sizing, border-box);
+    margin: 0;
+    padding: 0;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+/* generically prefix any property name */
+@mixin prefix($name, $value) {
+    -webkit-#{$name}: $value;
+    -moz-#{$name}: $value;
+    -ms-#{$name}: $value;
+    -o-#{$name}: $value;
+    #{$name}: $value;
+}
+/* for border-radius, named to be consistent with roundedcorner */
+@mixin rounded($radius: 6px) {
+    border-radius: $radius;
+}
+/* used for rounding a single corner. eg. roundedcorner(top, left) */
+@mixin roundedcorner($surface, $side, $radius: 6px) {
+    border-#{$surface}-#{$side}-radius: $radius;
+}
+@mixin boxshadow($horiz, $vert, $blur, $color) {
+    box-shadow: $horiz $vert $blur $color;
+}
+@mixin innershadow($horiz, $vert, $blur, $color) {
+    box-shadow: inset $horiz $vert $blur $color;
+}
+@mixin opacity($level) {
+    filter: alpha(opacity = $level * 100);
+    opacity: $level;
+}
+@mixin borderimage($image, $top, $right, $bottom, $left, $repeat: stretch) {
+    border-width: #{$top}px #{$right}px #{$bottom}px #{$left}px;
+    -webkit-border-image: url($image) $top $right $bottom $left $repeat;
+    -moz-border-image: url($image) $top $right $bottom $left $repeat;
+    -ms-border-image: url($image) $top $right $bottom $left $repeat;
+    -o-border-image: url($image) $top $right $bottom $left $repeat;
+    /*	border-image: url($image) $top $right $bottom $left $repeat; removed since Chrome's implementation is fundamentally broken */
+}
+
+/* useful for semi-transparent borders which can have bleed-through. See https://developer.mozilla.org/en/CSS/background-clip */
+@mixin backgroundclip($val: padding-box) {
+    -webkit-background-clip: $val;
+    -moz-background-clip: $val;
+}
+@mixin transition($property: all, $duration: 0.2s, $timing: linear) {
+    -webkit-transition: #{$property} $duration $timing;
+    -moz-transition: #{$property} $duration $timing;
+    -ie-transition: #{$property} $duration $timing;
+    -o-transition: #{$property} $duration $timing;
+    transition: $property $duration $timing;
+}
+/* if you need to transition a prefixed property, use this instead */
+@mixin transition-with-prefix($property, $duration: 0.2s, $timing: linear) {
+    -webkit-transition: -webkit-#{$property} $duration $timing;
+    -moz-transition: -moz-#{$property} $duration $timing;
+    -ie-transition: -moz-#{$property} $duration $timing;
+    -o-transition: -o-#{$property} $duration $timing;
+    transition: $property $duration $timing;
+}
+@mixin transform($type) {
+    -webkit-transform: $type;
+    -moz-transform: $type;
+    -ms-transform: $type;
+    -o-transform: $type;
+    transform: $type;
+}
+@mixin animation($name, $timing: 0.5s) {
+    -webkit-animation: $name $timing;
+    -moz-animation: $name $timing;
+    -ms-animation: $name $timing;
+    -o-animation: $name $timing;
+}
+
+@mixin clearfix {
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+@mixin opacity($opacity) {
+    opacity: $opacity;
+    $opacity-ie: $opacity * 100;
+    filter: alpha(opacity = $opacity-ie); //IE8
+}
+
+@mixin position($position, $args) {
+    @each $o in top right bottom left {
+        $i: index($args, $o);
+        @if $i and $i + 1 <= length($args) and type-of(nth($args, $i + 1)) == number {
+            #{$o}: nth($args, $i + 1);
+        }
+    }
+    position: $position;
+}
+
+// Positioning helpers
+@mixin absolute($args: "") {
+    @include position(absolute, $args);
+}
+
+@mixin fixed($args: "") {
+    @include position(fixed, $args);
+}
+
+@mixin relative($args: "") {
+    @include position(relative, $args);
+}
+
+@mixin font-size($size, $base: 16) {
+    font-size: $size; // fallback for old browsers
+    font-size: ($size / $base) * 1rem;
+}
+
+@mixin gradient($start-color, $end-color, $orientation) {
+    background: $start-color;
+    @if $orientation == "vertical" {
+        background: -webkit-linear-gradient(top, $start-color, $end-color);
+        background: linear-gradient(to bottom, $start-color, $end-color);
+    } @else if $orientation == "horizontal" {
+        background: -webkit-linear-gradient(left, $start-color, $end-color);
+        background: linear-gradient(to right, $start-color, $end-color);
+    } @else {
+        background: -webkit-radial-gradient(center, ellipse cover, $start-color, $end-color);
+        background: radial-gradient(ellipse at center, $start-color, $end-color);
+    }
+}
+
+@mixin toRem($property, $value) {
+    #{$property}: rem($value);
+}
+
+//flexbox
+@mixin flexbox {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+// Inline flex display
+@mixin inline-flex {
+    display: -webkit-inline-box;
+    display: -moz-inline-box;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+}
+
+// The 'flex' shorthand
+// - applies to: flex items
+// <positive-number>, initial, auto, or none
+@mixin flex($fg: 1, $fs: 0, $fb: auto) {
+    // Set a variable to be used by box-flex properties
+    $fg-boxflex: $fg;
+
+    // Box-Flex only supports a flex-grow value so lets grab the
+    // first item in the list and just return that.
+    @if type-of($fg) == "list" {
+        $fg-boxflex: nth($fg, 1);
+    }
+
+    -webkit-box: $fg-boxflex;
+    -moz-box: $fg-boxflex;
+    -webkit-flex: $fg $fs $fb;
+    -ms-flex: $fg $fs $fb;
+    flex: $fg $fs $fb;
+}
+
+// Flex Flow Direction
+// - applies to: flex containers
+// row (default) | row-reverse | column | column-reverse
+@mixin flex-direction($direction: row) {
+    @if $direction == row-reverse {
+        -webkit-box-direction: reverse;
+        -webkit-box-orient: horizontal;
+        -moz-box-direction: reverse;
+        -moz-box-orient: horizontal;
+    } @else if $direction == column {
+        -webkit-box-direction: normal;
+        -webkit-box-orient: vertical;
+        -moz-box-direction: normal;
+        -moz-box-orient: vertical;
+    } @else if $direction == column-reverse {
+        -webkit-box-direction: reverse;
+        -webkit-box-orient: vertical;
+        -moz-box-direction: reverse;
+        -moz-box-orient: vertical;
+    } @else {
+        -webkit-box-direction: normal;
+        -webkit-box-orient: horizontal;
+        -moz-box-direction: normal;
+        -moz-box-orient: horizontal;
+    }
+    -webkit-flex-direction: $direction;
+    -ms-flex-direction: $direction;
+    flex-direction: $direction;
+}
+
+// Flex Line Wrapping
+// - applies to: flex containers
+// nowrap | wrap | wrap-reverse
+@mixin flex-wrap($value: nowrap) {
+    // No Webkit/FF Box fallback.
+    -webkit-flex-wrap: $value;
+    @if $value == nowrap {
+        -ms-flex-wrap: none;
+    } @else {
+        -ms-flex-wrap: $value;
+    }
+    flex-wrap: $value;
+}
+
+// Flex Direction and Wrap
+// - applies to: flex containers
+// <flex-direction> || <flex-wrap>
+@mixin flex-flow(
+    $values: (
+        row nowrap,
+    )
+) {
+    // No Webkit/FF Box fallback.
+    -webkit-flex-flow: $values;
+    -ms-flex-flow: $values;
+    flex-flow: $values;
+}
+
+// Display Order
+// - applies to: flex items
+// <integer>
+@mixin order($int: 0) {
+    -webkit-box-ordinal-group: $int + 1;
+    -moz-box-ordinal-group: $int + 1;
+    -webkit-order: $int;
+    -ms-flex-order: $int;
+    order: $int;
+}
+
+// Flex grow factor
+// - applies to: flex items
+// <number>
+@mixin flex-grow($int: 1) {
+    -webkit-box-flex: $int;
+    -moz-box-flex: $int;
+    -webkit-flex-grow: $int;
+    -ms-flex: $int;
+    flex-grow: $int;
+}
+
+// Flex shrink
+// - applies to: flex item shrink factor
+// <number>
+@mixin flex-shrink($int: 0) {
+    -webkit-flex-shrink: $int;
+    -moz-flex-shrink: $int;
+    -ms-flex: $int;
+    flex-shrink: $int;
+}
+
+// Flex basis
+// - the initial main size of the flex item
+// - applies to: flex itemsnitial main size of the flex item
+// <width>
+@mixin flex-basis($value: auto) {
+    -webkit-flex-basis: $value;
+    flex-basis: $value;
+}
+
+// Axis Alignment
+// - applies to: flex containers
+// flex-start | flex-end | center | space-between | space-around
+@mixin justify-content($value: flex-start) {
+    @if $value == flex-start {
+        -webkit-box-pack: start;
+        -moz-box-pack: start;
+        -ms-flex-pack: start;
+    } @else if $value == flex-end {
+        -webkit-box-pack: end;
+        -moz-box-pack: end;
+        -ms-flex-pack: end;
+    } @else if $value == space-between {
+        -webkit-box-pack: justify;
+        -moz-box-pack: justify;
+        -ms-flex-pack: justify;
+    } @else if $value == space-around {
+        -ms-flex-pack: distribute;
+    } @else {
+        -webkit-box-pack: $value;
+        -moz-box-pack: $value;
+        -ms-flex-pack: $value;
+    }
+    -webkit-justify-content: $value;
+    justify-content: $value;
+}
+
+// Packing Flex Lines
+// - applies to: multi-line flex containers
+// flex-start | flex-end | center | space-between | space-around | stretch
+@mixin align-content($value: stretch) {
+    // No Webkit Box Fallback.
+    -webkit-align-content: $value;
+    @if $value == flex-start {
+        -ms-flex-line-pack: start;
+    } @else if $value == flex-end {
+        -ms-flex-line-pack: end;
+    } @else {
+        -ms-flex-line-pack: $value;
+    }
+    align-content: $value;
+}
+
+// Cross-axis Alignment
+// - applies to: flex containers
+// flex-start | flex-end | center | baseline | stretch
+@mixin align-items($value: stretch) {
+    @if $value == flex-start {
+        -webkit-box-align: start;
+        -moz-box-align: start;
+        -ms-flex-align: start;
+    } @else if $value == flex-end {
+        -webkit-box-align: end;
+        -moz-box-align: end;
+        -ms-flex-align: end;
+    } @else {
+        -webkit-box-align: $value;
+        -moz-box-align: $value;
+        -ms-flex-align: $value;
+    }
+    -webkit-align-items: $value;
+    align-items: $value;
+}
+
+// Cross-axis Alignment
+// - applies to: flex items
+// auto | flex-start | flex-end | center | baseline | stretch
+@mixin align-self($value: auto) {
+    // No Webkit Box Fallback.
+    -webkit-align-self: $value;
+    @if $value == flex-start {
+        -ms-flex-item-align: start;
+    } @else if $value == flex-end {
+        -ms-flex-item-align: end;
+    } @else {
+        -ms-flex-item-align: $value;
+    }
+    align-self: $value;
+}
+
+@mixin flexCenter() {
+    @include flexbox();
+    @include align-items(center);
+    @include justify-content(center);
+}

@@ -1,30 +1,31 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view/>
+  <component :is="layout" />
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import Layout from "@/components/Layout/Index";
+import EmptyLayout from "@/components/EmptyLayout";
+import { mapActions } from "vuex";
 
-#nav {
-  padding: 30px;
+export default {
+  components: {
+    Layout,
+    EmptyLayout,
+  },
+  methods: {
+    ...mapActions({ SET_BLOGS: "SET_BLOGS" }),
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+    layout() {
+      const meta = this.$route.meta;
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>
+      if (meta.layout === "main") {
+        return <Layout />;
+      } else {
+        return <EmptyLayout />;
+      }
+    },
+  },
+};
+</script>
+
+<style lang="scss"></style>

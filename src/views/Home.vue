@@ -1,18 +1,24 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <p class="title-md">Recent posts</p>
+  <div class="blog-cards">
+      <Card v-for="blog in blogs" :key="blog.title" :blog="blog" />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import Card from "@/components/Card";
+import { mapState } from "vuex";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
-    HelloWorld
-  }
-}
+    Card,
+  },
+  computed: {
+    ...mapState({
+      blogs: (state) => state.blogs.data,
+    }),
+  },
+};
 </script>
+

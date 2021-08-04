@@ -1,0 +1,149 @@
+@import url("https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700&display=swap");
+@import "variables";
+@import "functions";
+@import "mixins";
+
+html,
+body {
+  @include starter();
+  font-family: "Heebo", sans-serif;
+  color: $dark-clr;
+}
+
+a {
+  text-decoration: none;
+}
+
+html {
+  @include font-size(16);
+}
+
+.title-md {
+  font-style: normal;
+  font-weight: 400;
+  font-size: rem(22);
+  line-height: rem(32);
+}
+
+.title-lg {
+  font-style: normal;
+  font-weight: 700;
+  font-size: rem(30);
+  line-height: rem(44);
+}
+
+.title-xl {
+  font-weight: 800;
+  font-size: rem(36);
+  line-height: rem(55);
+  letter-spacing: 0.1em;
+}
+
+.main-wrapper {
+  margin: 0 auto;
+  width: 100%;
+  max-width: calc(100vw - 140px * 2);
+  padding: rem(17) 0;
+}
+
+.main-nav {
+  @include prefix(box-shadow, rgba(0, 0, 0, 0.05) 0px 4px 12px 0px);
+  padding: rem(17) rem(60) 0;
+
+  .navbar-brand {
+    width: rem(140) !important;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .nav-links {
+    @include flexbox();
+    @include justify-content(flex-end);
+
+    .nav-link {
+      @include toRem(font-size, 20);
+
+      * {
+        color: $black-clr;
+        transition: $transition;
+
+        &.active {
+          color: $primary-clr;
+        }
+
+        &:hover {
+          color: $primary-clr;
+        }
+      }
+    }
+  }
+}
+
+.footer {
+  @include flexCenter();
+  flex-direction: column;
+  padding: rem(50) rem(60) 0;
+  .social-media {
+    width: rem(220);
+    @include flexbox();
+    @include justify-content(space-between);
+    margin-bottom: rem(25);
+
+    img {
+      width: rem(28);
+    }
+  }
+
+  .copyright {
+    @include font-size(14);
+  }
+}
+
+.blog-card {
+  @include flexbox();
+  padding: rem(18) rem(25);
+  z-index: 3;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: rem(18);
+  border-radius: rem(7);
+
+  &-img {
+    @include toRem(margin-right, 18);
+    min-width: rem(320);
+
+    img {
+      width: 100%;
+      border-radius: rem(6);
+    }
+  }
+
+  &-categories {
+    @include flexbox();
+    margin-bottom: rem(22);
+  }
+
+  .category {
+    background-color: $dark-gray;
+    border-radius: rem(18);
+    padding: rem(8) rem(20);
+    color: $light-clr;
+    margin-right: rem(8);
+  }
+}
+
+.register-layout {
+  padding-block: min(20vh, 100px);
+  .title-xl {
+    color: $gray;
+    text-transform: uppercase;
+  }
+
+  .svg-wrapper {
+    img {
+      object-fit: contain;
+      width: 100%;
+    }
+  }
+}
