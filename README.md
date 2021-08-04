@@ -26,8 +26,10 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ### LICENSE
 ```
 Apache License
-<br />
+```
+
 Version 2.0, January 2004
-<br />
+```
+
 http://www.apache.org/licenses/
 ```
