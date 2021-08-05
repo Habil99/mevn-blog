@@ -14,6 +14,11 @@ a {
   text-decoration: none;
 }
 
+[disabled] {
+  pointer-events: none;
+  @include opacity(0.7);
+}
+
 html {
   @include font-size(16);
 }
@@ -39,11 +44,37 @@ html {
   letter-spacing: 0.1em;
 }
 
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}
+
 .main-wrapper {
   margin: 0 auto;
   width: 100%;
   max-width: calc(100vw - 140px * 2);
   padding: rem(17) 0;
+
+  &-p {
+    padding: min(20vh, 30px) 140px;
+    min-height: 100vh;
+    @include flexbox();
+    @include align-items(center);
+    @include justify-content(center);
+
+    &.backdrop {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+  }
 }
 
 .main-nav {
@@ -135,15 +166,116 @@ html {
 
 .register-layout {
   padding-block: min(20vh, 100px);
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 40px;
+  height: 100%;
+  @include flexbox();
+  @include align-items(center);
+
   .title-xl {
     color: $gray;
     text-transform: uppercase;
   }
 
+  .subtitle {
+    font-weight: 400;
+    color: $gray;
+    @include font-size(24);
+    @include toRem(margin-bottom, 30);
+
+    a {
+      @include font-size(18);
+      color: $border-clr;
+    }
+  }
+
+  .form-group {
+    @include toRem(margin-bottom, 20);
+
+    .form-input {
+      background-color: $white-clr;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+      border-radius: 2em;
+      padding: 8px 26px;
+      font-size: rem(16);
+    }
+
+    .form-label {
+      font-weight: 500;
+      font-size: rem(16);
+    }
+  }
+
+  .auth-btn {
+    width: 100%;
+    padding: rem(12) rem(32);
+    @include toRem(margin-top, 24);
+    border: none;
+    outline: none;
+    background-color: $purple;
+    color: $white-clr;
+    border-radius: 2em;
+    @include font-size(20);
+    font-weight: 700;
+    box-shadow: 0 16px 32px rgba(31, 38, 135, 0.37);
+    @include transition();
+
+    &:hover {
+      box-shadow: none;
+    }
+
+    .loader-img {
+      width: rem(25);
+    }
+  }
+
   .svg-wrapper {
+    display: flex;
+    align-items: center;
+    height: 100%;
+
     img {
       object-fit: contain;
       width: 100%;
     }
   }
+}
+
+.backdrop-blur {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 50%;
+    width: 60%;
+    background: rgba(137, 135, 255, 0.158);
+    filter: blur(500px);
+    height: 100%;
+    z-index: -1;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    width: 40%;
+    background: rgba(137, 135, 255, 0.199);
+    filter: blur(500px);
+    z-index: -1;
+  }
+}
+
+.error {
+  border-radius: rem(4);
 }

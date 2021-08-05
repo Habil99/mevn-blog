@@ -7,25 +7,33 @@ const routes = [
     name: "home",
     component: () => import("@/views/Home"),
     meta: {
-      layout: 'main'
-    }
+      layout: "main",
+    },
   },
   {
     path: "/blog/:id",
     name: "blog",
     component: Navbar,
     meta: {
-      layout: 'main'
-    }
+      layout: "main",
+    },
   },
   {
     path: "/sign-up",
     name: "sign-up",
     component: () => import("@/views/Register"),
     meta: {
-      layout: 'empty'
-    }
-  }
+      layout: "empty",
+    },
+  },
+  {
+    path: "/sign-in",
+    name: "sign-in",
+    component: () => import("@/views/Login"),
+    meta: {
+      layout: "empty",
+    },
+  },
 ];
 
 const router = createRouter({

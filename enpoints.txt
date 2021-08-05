@@ -1,0 +1,19 @@
+localhost:3000/api
+                  auth/
+                        register
+                        login
+                  blogs/
+                        all
+                        create_post
+                        get_by_id/:id
+                        get_by_username/:username
+                        delete/:userId/:blogId
+                        like/:id
+                        get_by_category/:category
+                  users/
+                        :id [delete]
+                        find_by_id/:id
+                        find_by_username/:username
+                        reset-password
+                        reset-password/:id/:token
+                        :id/profile-picture

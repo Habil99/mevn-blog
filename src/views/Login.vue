@@ -3,10 +3,15 @@
     <div class="register-layout">
       <div class="row">
         <div class="col-lg-6">
+          <div class="svg-wrapper">
+            <img src="@/assets/images/auth.svg" alt="" />
+          </div>
+        </div>
+        <div class="col-lg-6">
           <h1 class="title-xl">Welcome back!</h1>
           <h4 class="subtitle">
-            Already have an account,
-            <router-link to="/sign-in">Sign in</router-link>
+            Do not have an account,
+            <router-link to="/sign-up">Sign up</router-link>
           </h4>
           <div class="form-wrapper">
             <form
@@ -14,16 +19,6 @@
               @submit.prevent="AUTH_USER"
               @input="VALIDATE_FIELDS"
             >
-              <div class="form-group">
-                <label for="username" class="form-label">Username</label>
-                <input
-                  class="form-control form-input"
-                  type="text"
-                  id="username"
-                  v-model="auth.username"
-                  required
-                />
-              </div>
               <div class="form-group">
                 <label for="email" class="form-label">Email</label>
                 <input
@@ -41,18 +36,6 @@
                   type="password"
                   id="password"
                   v-model="auth.password"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label for="password-confirm" class="form-label"
-                  >Repeat password</label
-                >
-                <input
-                  class="form-control form-input"
-                  type="password"
-                  id="password-confirm"
-                  v-model="auth.repeat_password"
                   required
                 />
               </div>
@@ -74,14 +57,9 @@
                   src="@/assets/images/loader.svg"
                   alt="Vue blog loader"
                 />
-                <p class="m-0" v-else>Sign up</p>
+                <p class="m-0" v-else>Sign in</p>
               </button>
             </form>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <div class="svg-wrapper">
-            <img src="@/assets/images/auth.svg" alt="" />
           </div>
         </div>
       </div>
@@ -98,10 +76,8 @@ export default {
   data() {
     return {
       auth: {
-        username: null,
         email: null,
         password: null,
-        repeat_password: null,
         valid: false,
       },
     };
@@ -115,10 +91,8 @@ export default {
     }),
     VALIDATE_FIELDS() {
       if (
-        !this.auth.username ||
         !this.auth.email ||
-        !this.auth.password ||
-        !this.auth.repeat_password
+        !this.auth.password
       ) {
         this.auth.valid = false;
       } else {

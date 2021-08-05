@@ -5,12 +5,17 @@
 <script>
 import Layout from "@/components/Layout/Index";
 import EmptyLayout from "@/components/EmptyLayout";
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   components: {
     Layout,
     EmptyLayout,
+  },
+  created() {
+    if (!this.user) {
+      this.$router.push({ name: "sign-in" });
+    }
   },
   methods: {
     ...mapActions({ SET_BLOGS: "SET_BLOGS" }),
@@ -24,6 +29,9 @@ export default {
         return <EmptyLayout />;
       }
     },
+  },
+  computed: {
+    ...mapState("user", { user: (state) => state.user }),
   },
 };
 </script>
